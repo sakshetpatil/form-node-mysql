@@ -53,7 +53,7 @@ app.post('/register', upload.fields([
     const resumePath = req.files['resume'] ? req.files['resume'][0].path : null;
 
     // Insert query
-    const insertUserQuery = `INSERT INTO user (username, password, email, gender, address, mobile, dob, education, hobbies, photo_path, resume_path) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+    const insertUserQuery = `INSERT INTO user (username, password, email, gender, address, mobile, dob, education, hobbies, photo_path, resumePath) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
     // Execute the insert query
     db.query(insertUserQuery, [username, password, email, gender, address, mobile, dob, education, hobbies, photoPath, resumePath], (err, result) => {
