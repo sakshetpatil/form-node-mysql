@@ -6,7 +6,6 @@ const path = require('path');
 
 const app = express();
 
-// Multer setup for file uploads
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, 'uploads/');
@@ -18,7 +17,6 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-// MySQL database connection
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
@@ -41,30 +39,41 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 console.log(__dirname)
 
-// Route to handle form submission
 app.post('/register', upload.fields([
     { name: 'photo', maxCount: 1 },
     { name: 'resume', maxCount: 1 }
 ]), (req, res) => {
     const { username, password, email, gender, address, mobile, dob, education, hobbies } = req.body;
 
-    // File paths of the uploaded photo and resume
     const photoPath = req.files['photo'] ? req.files['photo'][0].path : null;
     const resumePath = req.files['resume'] ? req.files['resume'][0].path : null;
 
-    // Insert query
-    const insertUserQuery = `INSERT INTO user (username, password, email, gender, address, mobile, dob, education, hobbies, photo_path, resumePath) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-
-    // Execute the insert query
-    db.query(insertUserQuery, [username, password, email, gender, address, mobile, dob, education, hobbies, photoPath, resumePath], (err, result) => {
+    // Check if email already exists in the database
+    const checkEmailQuery = `SELECT * FROM user WHERE email = ?`;
+    db.query(checkEmailQuery, [email], (err, results) => {
         if (err) {
             console.log(err);
-            res.status(500).send('Error registering user');
+            return res.status(500).send('Error checking email');
+        }
+        
+        if (results.length > 0) {
+            // Email already exists in the database
+            return res.status(400).send('Email is already in use');
         } else {
-            res.send('User registered successfully');
+            // Email does not exist, proceed with registration
+            const insertUserQuery = `INSERT INTO user (username, password, email, gender, address, mobile, dob, education, hobbies, photo_path, resumePath) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+
+            db.query(insertUserQuery, [username, password, email, gender, address, mobile, dob, education, hobbies, photoPath, resumePath], (err, result) => {
+                if (err) {
+                    console.log(err);
+                    return res.status(500).send('Error registering user');
+                }
+                res.send('User registered successfully');
+            });
         }
     });
 });
+
 
 const PORT = process.env.PORT || 5000;
 
