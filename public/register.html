@@ -1,53 +1,197 @@
-<!-- public/register.html -->
-
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register User</title>
-</head>
-<body>
-    <h1>User Registration Form</h1>
-    <form action="/register" method="POST" enctype="multipart/form-data">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required><br><br>
+<html>
+    <head>
+        <title>Registration</title>
+        <style>
+            form {
+                    display: flex;
+                    flex-direction: column;
+                    /* border: 2px solid;
+                    padding: 20px; */
+                    width: 300px;
+                    margin: auto;
+                    box-sizing: border-box;
+            }
+            label {
+                font-weight: bold;
+                border-radius: 5px;
+                margin-top: 10px;
+                margin-bottom: 5px;
+            }
+            input[type="radio"],
+            input[type="checkbox"] {
+            margin-right: 5px;
+            }
+            input[type="submit"],
+            input[type="reset"] {
+            background-color:rgb(79, 79, 185);
+            color: white;
+            padding: 12px 20px;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+            margin-top: 20px;
+            width: 100%;
+            font-size: 16px;
+        }
+            input[type="submit"]:hover,
+            input[type="reset"]:hover {
+            background-color: #45a049;
+        }
+        </style>
+    </head>
+    <body>
+        <div class="form-container">
+            <form class="Registration-form" action="/register" method="post" enctype="multipart/form-data">
+                <h1>Student Register</h1>
+                <br>
+                <label for="username">Username</label> 
+                <input type="text" id="username" name="username" required>
+                <br>
+    
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required><br>
+    
+                <label for="confirm-password">Confirm Password:</label>
+                <input type="password" id="confirm-password" name="confirm-password" required>
+    
+                <br>
+                <label for="email">Email Id:</label>
+                <input type="text" id="email" name="email" required>
+                <br>
+                <label for="gender">Gender:</label>
+                <div>
+                    <input type="radio" id="male" name="gender" value="male" checked>
+                    <label for="male">Male</label>
+    
+                    <input type="radio" id="female" name="gender" value="female">
+                    <label for="female">Female</label>
+    
+                    <input type="radio" id="other" name="gender" value="other">
+                    <label for="other">Other</label>
+                </div>
+                <br>
+    
+                <label for="address">Address:</label>
+                <textarea id="address" name="address" rows="3" required></textarea>
+                <br>
+    
+                <label for="mobile">Mobile No.</label>
+                <input type="tel" id="mobile" name="mobile" pattern="[0-9]{10}" required>
+                <small>format:10 digit number without dash or space</small>
+                <br>
+    
+                <label for="dob">DOB</label>
+                <input type="date" id="dob" name="dob" required>
+                <br>
+    
+                <label for="education">Education</label>
+                <input list="education" name="education">
+                <datalist id="education">
+                    <option value="BE/B.TEC.">Bachelor of Engineering</option>
+                    <option value="PG">Post Graduate</option>
+                    <option value="MSC">MSC(cs)</option>
+                </datalist>
+                <br>
+    
+                <div class="hobbies-section">
+                    <label>Hobbies (2 to 4)</label><br>
+                    <input type="checkbox" id="hobbies1" name="hobbies1" value="Swimming">
+                    <label for="hobbies1">Swimming</label>
+                    <input type="checkbox" id="hobbies2" name="hobbies2" value="Photography">
+                    <label for="hobbies2">Photography</label>
+                    <input type="checkbox" id="hobbies3" name="hobbies3" value="Calligraphy">
+                    <label for="hobbies3">Calligraphy</label>
+                    <input type="checkbox" id="hobbies4" name="hobbies4" value="parajumping">
+                    <label for="hobbies4">Parajumping</label>
+                    <input type="checkbox" id="hobbies5" name="hobbies5" value="Reading">
+                    <label for="hobbies5">Reading</label>
+                    <div class="error-message" id="hobbies-error"></div>
+                </div>
+    
+                <label for="photo">Photo:</label>
+                <input type="file" id="photo" name="photo" accept="image/png ,image/jpeg, image/jpg"><br>
+    
+                <label for="resume">Resume:</label>
+                <input type="file" id="resume" name="resume" accept=" .pdf, .doc, .docx">
+                <br>
+                <input type="submit" value="Register">
+                <br>
+                <input type="reset" value="Clear">
+            </form>
+        </div>
+        <script>
+            const form=document.getElementById("Registration-form");
+            const mobileinput=document.getElementById("mobile");
+            const dobinput=document.getElementById("dob");
+            const hobbiesError=document.getElementById("hobbies-errror");
+            const passwordinput=document.getElementById(password);
+            const confirmpasswordinput=document.getElementById("confirm-password");
+            const passwordError=document.getElementById("password-error");
 
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required><br><br>
+            form.addEventListener(submit, function(event){
+                if(passwordinput.value=!confirmpasswordinput){
+                    event.preventDefault();
+                    passwordError.textContent="password do not match";
+                    confirmpasswordinput.focus();
+                    return;
+                }else{
+                    passwordError.textContent="";
+                }
 
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required><br><br>
 
-        <label for="gender">Gender:</label>
-        <select id="gender" name="gender">
-            <option value="male">Male</option>
-            <option value="female">Female</option>
-            <option value="other">Other</option>
-        </select><br><br>
+                if(!validateMobile()){
+                    event.preventDefault();
+                    return;
+                }
 
-        <label for="address">Address:</label>
-        <textarea id="address" name="address" rows="4" cols="50" required></textarea><br><br>
+                if(!validateDOB()){
+                    event.preventDefault();
+                    return;
+                }
 
-        <label for="mobile">Mobile:</label>
-        <input type="text" id="mobile" name="mobile" required><br><br>
+                const checkedCount=countCheckedHobbies();
+                    if(checkedCount<2 || checkedCount>4){
+                        event.preventDefault();
+                        hobbiesError=textContent="please select between 2 to 4 hobbies";
+                    }else{
+                        hobbiesError=textContent="";
+                    }
+            });
 
-        <label for="dob">Date of Birth:</label>
-        <input type="date" id="dob" name="dob" required><br><br>
+            function validateMobile()
+            {
+                const mobilePattern=/^[0-9]{10}$/;
+                if (!mobilePattern.test(mobileInput.value)) {
+                alert("Mobile number must be 10 digits.");
+                mobileInput.focus();
+                return false;
+                }
+                return true;
+            }
 
-        <label for="education">Education:</label>
-        <input type="text" id="education" name="education" required><br><br>
+            function validateDOB() {
+            const dob = new Date(dobInput.value);
+            const today = new Date();
+            const age = today.getFullYear() - dob.getFullYear();
+            const monthDiff = today.getMonth() - dob.getMonth();
+            
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+                age--;
+            }
 
-        <label for="hobbies">Hobbies:</label>
-        <input type="text" id="hobbies" name="hobbies"><br><br>
+            if (age < 18 || age > 28) {
+                alert("Age must be between 18 and 28 years.");
+                dobInput.focus();
+                return false;
+            }
+            return true;
+        }
 
-        <label for="photo">Photo:</label>
-        <input type="file" id="photo" name="photo"><br><br>
-
-        <label for="resume">Resume:</label>
-        <input type="file" id="resume" name="resume"><br><br>
-
-        <button type="submit">Submit</button>
-    </form>
-</body>
+            function countCheckedHobbies(){
+                const checkboxes=form.querySelectorAll('input [type="checkbox"]');
+                return Array.from(checkboxes).filter(checkbox=> checkbox.checked).length;
+            }
+        </script>
+    </body>
 </html>
