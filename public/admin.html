@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Admin Page - User List</title>
+                <link rel="stylesheet" href="styles.css"> <!-- Link to external CSS file -->
+            </head>
+            <body>
+                <h1>Admin Page - User List</h1>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Gender</th>
+                            <th>Address</th>
+                            <th>Mobile</th>
+                            <th>Date of Birth</th>
+                            <th>Education</th>
+                            <th>Hobbies</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${results.map(user => `
+                            <tr>
+                                <td>${user.username}</td>
+                                <td>${user.email}</td>
+                                <td>${user.gender}</td>
+                                <td>${user.address}</td>
+                                <td>${user.mobile}</td>
+                                <td>${user.dob}</td>
+                                <td>${user.education}</td>
+                                <td>${user.hobbies}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            </body>
+        </html>
