@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html>
     <head>
         <title>Registration</title>
@@ -42,7 +42,7 @@
     </head>
     <body>
         <div class="form-container">
-            <form class="Registration-form" action="/register" method="post" enctype="multipart/form-data">
+            <form class="Registration-form" action="/register" method="post" enctype="multipart/form-data" onsubmit="return validation() && validateDOB()" >
                 <h1>Student Register</h1>
                 <br>
                 <label for="username">Username</label> 
@@ -96,15 +96,15 @@
     
                 <div class="hobbies-section">
                     <label>Hobbies (2 to 4)</label><br>
-                    <input type="checkbox" id="hobbies1" name="hobbies1" value="Swimming">
+                    <input type="checkbox" id="hobbies1" name="hobbies[]" value="Swimming">
                     <label for="hobbies1">Swimming</label>
-                    <input type="checkbox" id="hobbies2" name="hobbies2" value="Photography">
+                    <input type="checkbox" id="hobbies2" name="hobbies[]" value="Photography">
                     <label for="hobbies2">Photography</label>
-                    <input type="checkbox" id="hobbies3" name="hobbies3" value="Calligraphy">
+                    <input type="checkbox" id="hobbies3" name="hobbies[]" value="Calligraphy">
                     <label for="hobbies3">Calligraphy</label>
-                    <input type="checkbox" id="hobbies4" name="hobbies4" value="parajumping">
+                    <input type="checkbox" id="hobbies4" name="hobbies[]" value="parajumping">
                     <label for="hobbies4">Parajumping</label>
-                    <input type="checkbox" id="hobbies5" name="hobbies5" value="Reading">
+                    <input type="checkbox" id="hobbies5" name="hobbies[]" value="Reading">
                     <label for="hobbies5">Reading</label>
                     <div class="error-message" id="hobbies-error"></div>
                 </div>
@@ -115,63 +115,49 @@
                 <label for="resume">Resume:</label>
                 <input type="file" id="resume" name="resume" accept=" .pdf, .doc, .docx">
                 <br>
-                <input type="submit" value="Register">
+                <input type="submit" value="Register" >
                 <br>
                 <input type="reset" value="Clear">
             </form>
         </div>
         <script>
-            const form=document.getElementById("Registration-form");
-            const mobileinput=document.getElementById("mobile");
+            
+            /*const form=document.getElementById("Registration-form");
+            const mobileInput=document.getElementById("mobile");
             const dobinput=document.getElementById("dob");
             const hobbiesError=document.getElementById("hobbies-errror");
-            const passwordinput=document.getElementById(password);
-            const confirmpasswordinput=document.getElementById("confirm-password");
+          
             const passwordError=document.getElementById("password-error");
-
-            form.addEventListener(submit, function(event){
-                if(passwordinput.value=!confirmpasswordinput){
-                    event.preventDefault();
-                    passwordError.textContent="password do not match";
-                    confirmpasswordinput.focus();
-                    return;
-                }else{
-                    passwordError.textContent="";
+*/
+             function validation()
+             {
+               // alert('hi');
+                var passwordinput=document.getElementById('password').value;
+               // alert(passwordinput);
+                var confirmpasswordinput=document.getElementById("confirm-password").value;
+               // alert(confirmpasswordinput);
+                if(passwordinput != confirmpasswordinput)
+                {
+                   
+                    alert("password do not match");
+                    document.getElementById("confirm-password").focus();
+                    return false;
                 }
 
-
-                if(!validateMobile()){
-                    event.preventDefault();
-                    return;
-                }
-
-                if(!validateDOB()){
-                    event.preventDefault();
-                    return;
-                }
-
-                const checkedCount=countCheckedHobbies();
-                    if(checkedCount<2 || checkedCount>4){
-                        event.preventDefault();
-                        hobbiesError=textContent="please select between 2 to 4 hobbies";
-                    }else{
-                        hobbiesError=textContent="";
-                    }
-            });
-
-            function validateMobile()
-            {
                 const mobilePattern=/^[0-9]{10}$/;
-                if (!mobilePattern.test(mobileInput.value)) {
-                alert("Mobile number must be 10 digits.");
-                mobileInput.focus();
-                return false;
+                if (mobilePattern.test != document.getElementById("mobile").value) 
+                {
+                    alert("Mobile number must be 10 digits.");
+                    document.getElementById("mobile").focus();
+                    return false;
                 }
+
                 return true;
             }
-
+            
             function validateDOB() {
-            const dob = new Date(dobInput.value);
+                alert("hi");
+            const dob = new Date(document.getElementById("dob").value);
             const today = new Date();
             const age = today.getFullYear() - dob.getFullYear();
             const monthDiff = today.getMonth() - dob.getMonth();
@@ -182,16 +168,196 @@
 
             if (age < 18 || age > 28) {
                 alert("Age must be between 18 and 28 years.");
-                dobInput.focus();
+                document.getElementById("dob").focus();
                 return false;
             }
             return true;
         }
-
+/*
             function countCheckedHobbies(){
                 const checkboxes=form.querySelectorAll('input [type="checkbox"]');
                 return Array.from(checkboxes).filter(checkbox=> checkbox.checked).length;
             }
+                */
         </script>
     </body>
+</html> -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Registration</title>
+    <style>
+        form {
+            display: flex;
+            flex-direction: column;
+            width: 300px;
+            margin: auto;
+            box-sizing: border-box;
+        }
+        label {
+            font-weight: bold;
+            border-radius: 5px;
+            margin-top: 10px;
+            margin-bottom: 5px;
+        }
+        input[type="radio"],
+        input[type="checkbox"] {
+            margin-right: 5px;
+        }
+        input[type="submit"],
+        input[type="reset"] {
+            background-color: rgb(79, 79, 185);
+            color: white;
+            padding: 12px 20px;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+            margin-top: 20px;
+            width: 100%;
+            font-size: 16px;
+        }
+        input[type="submit"]:hover,
+        input[type="reset"]:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+<div class="form-container">
+    <form id="Registration-form" action="/register" method="post" enctype="multipart/form-data" onsubmit="return validation() && validateDOB() && countCheckedHobbies()">
+        <h1>Student Register</h1>
+        <br>
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" required>
+        <br>
+
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required><br>
+
+        <label for="confirm-password">Confirm Password:</label>
+        <input type="password" id="confirm-password" name="confirm-password" required>
+
+        <br>
+        <label for="email">Email Id:</label>
+        <input type="email" id="email" name="email" required>
+        <br>
+        <label for="gender">Gender:</label>
+        <div>
+            <input type="radio" id="male" name="gender" value="male" checked>
+            <label for="male">Male</label>
+
+            <input type="radio" id="female" name="gender" value="female">
+            <label for="female">Female</label>
+
+            <input type="radio" id="other" name="gender" value="other">
+            <label for="other">Other</label>
+        </div>
+        <br>
+
+        <label for="address">Address:</label>
+        <textarea id="address" name="address" rows="3" required></textarea>
+        <br>
+
+        <label for="mobile">Mobile No.</label>
+        <input type="tel" id="mobile" name="mobile" pattern="[0-9]{10}" required>
+        <small>format: 10 digit number without dash or space</small>
+        <br>
+
+        <label for="dob">DOB</label>
+        <input type="date" id="dob" name="dob" required>
+        <br>
+
+        <label for="education">Education</label>
+        <input list="education" name="education">
+        <datalist id="education">
+            <option value="BE/B.TEC.">Bachelor of Engineering</option>
+            <option value="PG">Post Graduate</option>
+            <option value="MSC">MSC(cs)</option>
+        </datalist>
+        <br>
+
+        <div class="hobbies-section">
+            <label>Hobbies (2 to 4)</label><br>
+            <input type="checkbox" id="hobbies1" name="hobbies[]" value="Swimming">
+            <label for="hobbies1">Swimming</label>
+            <input type="checkbox" id="hobbies2" name="hobbies[]" value="Photography">
+            <label for="hobbies2">Photography</label>
+            <input type="checkbox" id="hobbies3" name="hobbies[]" value="Calligraphy">
+            <label for="hobbies3">Calligraphy</label>
+            <input type="checkbox" id="hobbies4" name="hobbies[]" value="Parajumping">
+            <label for="hobbies4">Parajumping</label>
+            <input type="checkbox" id="hobbies5" name="hobbies[]" value="Reading">
+            <label for="hobbies5">Reading</label>
+            <div class="error-message" id="hobbies-error"></div>
+        </div>
+
+        <label for="photo">Photo:</label>
+        <input type="file" id="photo" name="photo" accept="image/png ,image/jpeg, image/jpg"><br>
+
+        <label for="resume">Resume:</label>
+        <input type="file" id="resume" name="resume" accept=".pdf, .doc, .docx">
+        <br>
+        <input type="submit" value="Register">
+        <br>
+        <input type="reset" value="Clear">
+    </form>
+</div>
+<script>
+    function validation() {
+        var passwordinput = document.getElementById('password').value;
+        var confirmpasswordinput = document.getElementById("confirm-password").value;
+        if (passwordinput !== confirmpasswordinput) {
+            alert("Passwords do not match");
+            document.getElementById("confirm-password").focus();
+            return false;
+        }
+
+        const mobilePattern = /^[0-9]{10}$/;
+        if (!mobilePattern.test(document.getElementById("mobile").value)) {
+            alert("Mobile number must be 10 digits.");
+            document.getElementById("mobile").focus();
+            return false;
+        }
+
+        return true;
+    }
+
+    function validateDOB() 
+    {
+        const dob = new Date(document.getElementById("dob").value);
+        const today = new Date();
+        const age = today.getFullYear() - dob.getFullYear();
+        const monthDiff = today.getMonth() - dob.getMonth();
+
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+            age--;
+        }
+
+        if (age < 18 || age > 28) {
+            alert("Age must be between 18 and 28 years.");
+            document.getElementById("dob").focus();
+            return false;
+        }
+        return true;
+    }
+
+    function countCheckedHobbies() {
+    const checkboxes = document.querySelectorAll('input[type="checkbox"][name="hobbies"]:checked');
+    const checkedCount = checkboxes.length;
+
+    // Check if the count is between 2 and 4 (inclusive)
+    if (checkedCount >= 2 && checkedCount <= 4) {
+        return true;
+    } else {
+        // Show error message or handle validation
+        const errorElement = document.getElementById('hobbies-error');
+        errorElement.textContent = "Please select between 2 to 4 hobbies.";
+        return false;
+}
+
+}
+
+</script>
+</body>
 </html>
