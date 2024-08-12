@@ -1,40 +1,312 @@
 <!DOCTYPE html>
 <html lang="en">
-            <head>
-                <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>Admin Page - User List</title>
-                <link rel="stylesheet" href="styles.css"> <!-- Link to external CSS file -->
-            </head>
-            <body>
-                <h1>Admin Page - User List</h1>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Username</th>
-                            <th>Email</th>
-                            <th>Gender</th>
-                            <th>Address</th>
-                            <th>Mobile</th>
-                            <th>Date of Birth</th>
-                            <th>Education</th>
-                            <th>Hobbies</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${results.map(user => `
-                            <tr>
-                                <td>${user.username}</td>
-                                <td>${user.email}</td>
-                                <td>${user.gender}</td>
-                                <td>${user.address}</td>
-                                <td>${user.mobile}</td>
-                                <td>${user.dob}</td>
-                                <td>${user.education}</td>
-                                <td>${user.hobbies}</td>
-                            </tr>
-                        `).join('')}
-                    </tbody>
-                </table>
-            </body>
-        </html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            margin-top: 20px;
+        }
+        .btn{
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        .form-container {
+            display: none;
+        }
+        .form-container img {
+            margin-bottom: 10px;
+            max-width: 100px;
+            max-height: 100px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div>
+            <h1 class="text-center">Welcome, Sakshet <span id="adminName"></span>!</h1>
+        </div>
+        <div style="text-align:right;">
+            <button><a href="/admin-logout">Logout</a></button>
+        </div>
+        
+        <div id="userList">
+            <h2>User List</h2>
+            <table id="usersTable" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Gender</th>
+                        <th>Address</th>
+                        <th>Mobile</th>
+                        <th>DOB</th>
+                        <th>Education</th>
+                        <th>Hobbies</th>
+                        <th>Photo</th>
+                        <th>Resume</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="usersTableBody">
+                </tbody>
+            </table>
+        </div>
+
+        <div id="edit-profile-form" class="form-container">
+            <form id="editForm" action="/update" method="POST" enctype="multipart/form-data">
+                <h3>Edit Profile</h3>
+                <div>
+                    <label for="username">Username:</label>
+                    <input type="text" id="usernameInput" name="username" class="form-control" required>
+                </div>
+
+                <div>
+                    <label for="email">Email:</label>
+                    <input type="email" id="emailInput" name="email" class="form-control" required>
+                </div>
+
+                <div>
+                    <label for="gender">Gender:</label>
+                    <select id="genderInput" name="gender" class="form-control" required>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="address">Address:</label>
+                    <input type="text" id="addressInput" name="address" class="form-control">
+                </div>
+
+                <div>
+                    <label for="mobile">Mobile:</label>
+                    <input type="text" id="mobileInput" name="mobile" class="form-control">
+                </div>
+
+                <div>
+                    <label for="dob">Date of Birth:</label>
+                    <input type="date" id="dobInput" name="dob" class="form-control" required min="1996-01-01" max="2006-01-01">
+                </div>
+
+                <div>
+                    <label for="education">Education:</label>
+                    <input list="education" name="education" id="educationInput" class="form-control">
+                    <datalist id="education">
+                        <option value="BE/B.Tech.">Bachelor of Engineering</option>
+                        <option value="PG">Post Graduate</option>
+                        <option value="MSC">MSc (CS)</option>
+                    </datalist>
+                </div>
+
+                <div>
+                    <label>Hobbies:</label><br>
+                    <div>
+                        <input type="checkbox" id="hobby1" name="hobbies[]" value="Swimming">
+                        <label for="hobby1" class="form-check-label">Swimming</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="hobby2" name="hobbies[]" value="Photography" >
+                        <label for="hobby2" class="form-check-label">Photography</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="hobby3" name="hobbies[]" value="Calligraphy">
+                        <label for="hobby3" class="form-check-label">Calligraphy</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="hobby4" name="hobbies[]" value="Parajumping" >
+                        <label for="hobby4" class="form-check-label">Parajumping</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="hobby5" name="hobbies[]" value="Reading">
+                        <label for="hobby5" class="form-check-label">Reading</label>
+                    </div>
+                </div>
+
+                <div >
+                    <label for="photo">Photo:</label>
+                    <img id="userPhotos" src="" alt="User Photo" style="display: none;"><br>
+                    <input type="file" id="photo" name="photo" accept="image/png,image/jpeg,image/jpg">
+                </div>
+                <br>
+                <div>
+                    <label for="resume">Resume:</label>
+                    <a id="resumeLinks" href="#" target="_blank">Download Resume</a><br>
+                    <input type="file" id="resume" name="resume" accept=".pdf,.doc,.docx" >
+                </div>
+
+                <div style="text-align: center;">
+                    <button type="submit" style="background-color: #405cd7; color: #f8f9fa;">Save Changes</button>
+                    <button type="button" id="cancelButton"style="background-color: #405cd7; color: #f8f9fa;">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            function fetchAdminInfo() {
+                $.ajax({
+                    url: '/admin-info', 
+                    method: 'GET',
+                    success: function(data) {
+                        $('#adminName').text(data.name); 
+                        fetchUsers(); 
+                    },
+                    error: function(error) {
+                        console.error('Error fetching admin info:', error);
+                    }
+                });
+            }
+
+            function fetchUsers() {
+                $.ajax({
+                    url: '/users',
+                    method: 'GET',
+                    success: function(data) {
+                        populateUserTable(data);
+                    },
+                    error: function(error) {
+                        console.error('Error fetching users:', error);
+                    }
+                });
+            }
+
+            function populateUserTable(users) {
+                const userTableBody = $('#usersTableBody');
+                userTableBody.empty();
+                users.forEach(user => {
+                    const row = $('<tr>');
+                    row.append(`<td>${user.username}</td>`);
+                    row.append(`<td>${user.email}</td>`);
+                    row.append(`<td>${user.gender}</td>`);
+                    row.append(`<td>${user.address}</td>`);
+                    row.append(`<td>${user.mobile}</td>`);
+                    row.append(`<td>${user.dob}</td>`);
+                    row.append(`<td>${user.education}</td>`);
+                    row.append(`<td>${user.hobbies ? user.hobbies.split(', ').join(', ') : ''}</td>`);
+                    row.append(user.photo_path ? `<td><img src="${user.photo_path}" alt="User Photo" style="width: 100px; height: 100px;"></td>` : `<td>No photo available</td>`);
+                    row.append(user.resumePath ? `<td><a href="${user.resumePath}" target="_blank">Download Resume</a></td>` : `<td>No resume available</td>`);
+                    row.append(`
+                        <td>
+                            <button class="btn edtbtn" onclick="editUser(${user.iduser})">Edit</button><br>
+                            <button class="btn delbtn" onclick="deleteUser('${user.email}')">Delete</button>
+                        </td>
+                    `);
+                    userTableBody.append(row);
+                });
+            }
+
+            window.editUser = function(userId) {
+                $.ajax({
+                    url: `/users/${userId}`,
+                    method: 'GET',
+                    success: function(user) {
+                        loadUserData(user);
+                        toggleEdit(true); 
+                    },
+                    error: function(error) {
+                        console.error('Error fetching user data:', error);
+                    }
+                });
+            };
+
+            function loadUserData(user) {
+                $('#usernameInput').val(user.username);
+                $('#emailInput').val(user.email);
+                $('#genderInput').val(user.gender);
+                $('#addressInput').val(user.address);
+                $('#mobileInput').val(user.mobile);
+                $('#dobInput').val(user.dob);
+                $('#educationInput').val(user.education);
+                
+                // Set hobbies checkboxes
+                const hobbies = user.hobbies ? user.hobbies.split(', ') : [];
+                $('input[name="hobbies[]"]').each(function() {
+                    $(this).prop('checked', hobbies.includes($(this).val()));
+                });
+
+                // Set photo and resume
+                if (user.photo_path) {
+                    $('#userPhotos').attr('src', `${user.photo_path}`).show();
+                }
+                if (user.resumePath) {
+                    $('#resumeLinks').attr('href', `${user.resumePath}`).text('Download Resume').show();
+                }
+            }
+
+            function toggleEdit(showEditForm) {
+                const profileInfo = $('#userList');
+                const editForm = $('#edit-profile-form');
+
+                if (showEditForm) {
+                    profileInfo.hide();
+                    editForm.show();
+                } else {
+                    profileInfo.show();
+                    editForm.hide();
+                }
+            }
+
+            $('#cancelButton').click(function() {
+                toggleEdit(false); 
+            });
+
+            function checkSession() {
+                $.ajax({
+                    url: '/checkSession',
+                    method: 'GET',
+                    success: function() {
+                        fetchUsers();
+                        fetchAdminInfo();
+                    },
+                    error: function(xhr) {
+                        if (xhr.status === 401) {
+                            window.location.href = '/admin-login.html';
+                        } else {
+                            console.error('Error checking session', xhr.responseText);
+                        }
+                    }
+                });
+            }
+
+            checkSession();
+        });
+
+        function deleteUser(email) {
+            if (confirm(`Are you sure you want to delete the user with email "${email}"?`)) {
+                $.ajax({
+                    url: '/delete-user',
+                    method: 'POST',
+                    data: { email: email },
+                    success: function(response) {
+                        alert('User has been deleted.');
+                        location.reload();
+                    },
+                    error: function(xhr) {
+                        console.error('Error deleting user:', xhr.responseText);
+                        alert('Failed to delete user.');
+                    }
+                });
+            }
+        }
+    </script>
+</body>
+</html>
