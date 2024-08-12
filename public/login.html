@@ -1,5 +1,3 @@
-<!DOCTYPE html>
-<html>
     <!DOCTYPE html>
     <html lang="en">
     <head>
@@ -7,37 +5,91 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Login</title>
         <style>
-            form {
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #f4f4f4;
                 text-align: center;
+                padding: 50px;
+            }
+            .container {
+                max-width: 400px;
+                margin: auto;
+                padding: 20px;
+                background: #fff;
+                border-radius: 8px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+            h2 {
+                margin-bottom: 20px;
+                color: #333;
             }
             label {
-                font-weight: bold;
-                border-radius: 5px;
-                margin-top: 50px;
-                margin-bottom: 5px;
+                display: block;
+                margin: 10px 0 5px;
+                text-align: left;
+                color: #555;
             }
-            input[type="submit"],
-            input[type="reset"] {
-            padding: 12px 20px;
-            border-radius: 4px;
-            margin-top: 20px;
-            font-size: 16px;
-        }
-        
+            input[type="text"],
+            input[type="password"] {
+                width: 100%;
+                padding: 10px;
+                margin: 5px 0 20px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                box-sizing: border-box;
+            }
+            button {
+                background-color: #007bff;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                margin: 5px;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 16px;
+            }
+            button[type="reset"] {
+                background-color: #6c757d;
+            }
+            button:hover {
+                opacity: 0.9;
+            }
+            button[type="reset"]:hover {
+                background-color: #5a6268;
+            }
+            a {
+                display: inline-block;
+                margin-top: 20px;
+                color: #007bff;
+                text-decoration: none;
+            }
+            a:hover {
+                text-decoration: underline;
+            }
         </style>
     </head>
     <body>
-        <form action="/login" method="post">
-            <h1>Login Form</h1>
-            <label for="username">Username: </label>
-            <input type="text" id="username" name="username" required><br><br>
-            <label for="password">Password: </label>
-            <input type="password" id="password" name="password" required><br><br>
-            <input type="submit" value="Login">
-            <input type="reset" value="Clear"><br><br>
-
-            <a href="http://127.0.0.1:5500/form-node-mysql/public/admin-login.html">or Admin login</a>
-        </form>
+        <div class="container">
+            <form action="/login" method="post">
+                <h1>Login Form</h1>
+                <label for="username">Username: </label>
+                <input type="text" id="username" name="username" required><br><br>
+                <label for="password">Password: </label>
+                <input type="password" id="password" name="password" required><br><br>
+                <button type="submit">Login</button>
+                <button type="reset">Clear</button><br><br>
+                <a href="/register.html">sign up</a>
+                <br>
+                <a href="/admin-login.html">or Admin login</a>
+    
+                <script>
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const error = urlParams.get('error');
+                    if (error) {
+                        alert(error);
+                    }
+                </script>
+            </form>
+        </div>
     </body>
-    </html>
 </html>
