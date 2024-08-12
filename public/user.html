@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="scripts.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2 {
+            color: #333;
+        }
+
+        p {
+            margin: 10px 0;
+            color: #555;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            text-align: left;
+            color: #555;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="date"],
+        select,
+        input[type="file"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin: 5px 0 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .edit-profile-form {
+            display: none;
+        }
+
+        .hobbies,
+        .education {
+            text-align: left;
+            margin: 20px 0;
+        }
+
+        .hobbies div,
+        .education div {
+            margin-bottom: 10px;
+        }
+
+        .education input {
+            width: calc(100% - 22px);
+            padding: 10px;
+        }
+
+        .hobbies input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        .hobbies label,
+        .education label {
+            display: inline-block;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome, <span id="usernamePlaceholder"></span>!</h1>
+
+        <div id="profile-info" class="profile-info">
+            <h2>Profile Information</h2>
+            <p><strong>Username:</strong> <span id="username"></span></p>
+            <p><strong>Email:</strong> <span id="email"></span></p>
+            <p><strong>Gender:</strong> <span id="gender"></span></p>
+            <p><strong>Address:</strong> <span id="address"></span></p>
+            <p><strong>Mobile:</strong> <span id="mobile"></span></p>
+            <p><strong>Date of Birth:</strong> <span id="dob"></span></p>
+            <p><strong>Education:</strong> <span id="education"></span></p>
+            <p><strong>Hobbies:</strong></p>
+            <p id="hobbiesList"></p>
+            <p><strong>Photo:</strong> <img id="userPhoto" alt="User Photo" height="100" width="100" /></p>
+            <p><strong>Resume:</strong> <a id="resumeLink" href="/public/uploads/" target="_blank">Download Resume</a></p>
+            <button onclick="toggleEdit()">Edit Profile</button><br><br>
+        </div>
+
+        <div>
+            <button style="padding: 10px 20px;"><a href="/logout" style="color: white;">Logout</a></button>
+        </div>
+
+        <div id="edit-profile-form" class="edit-profile-form">
+            <h2>Edit Profile</h2>
+            <form id="editForm" action="/edit-profile" method="POST" enctype="multipart/form-data">
+                <label for="username">Username:</label>
+                <input type="text" id="usernameInput" name="username" required><br><br>
+
+                <label for="email">Email:</label>
+                <input type="email" id="emailInput" name="email" required><br><br>
+
+                <label for="gender">Gender:</label>
+                <select id="genderInput" name="gender" required>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                </select><br><br>
+
+                <label for="address">Address:</label>
+                <input type="text" id="addressInput" name="address"><br><br>
+
+                <label for="mobile">Mobile:</label>
+                <input type="text" id="mobileInput" name="mobile"><br><br>
+
+                <label for="dob">Date of Birth:</label>
+                <input type="date" id="dobInput" name="dob" required min="1996-01-01" max="2006-01-01"><br><br>
+
+                <div>
+                    <label for="education">Education:</label>
+                    <input list="education" name="education" id="educationInput">
+                    <datalist id="education">
+                        <option value="BE/B.Tech.">Bachelor of Engineering</option>
+                        <option value="PG">Post Graduate</option>
+                        <option value="MSC">MSc (CS)</option>
+                    </datalist>
+                </div><br><br>
+
+                <div class="hobbies">
+                    <label>Hobbies:</label><br>
+                    <div>
+                        <input type="checkbox" id="hobby1" name="hobbies[]" value="Swimming">
+                        <label for="hobby1">Swimming</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="hobby2" name="hobbies[]" value="Photography">
+                        <label for="hobby2">Photography</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="hobby3" name="hobbies[]" value="Calligraphy">
+                        <label for="hobby3">Calligraphy</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="hobby4" name="hobbies[]" value="Parajumping">
+                        <label for="hobby4">Parajumping</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="hobby5" name="hobbies[]" value="Reading">
+                        <label for="hobby5">Reading</label>
+                    </div>
+                </div><br><br>
+
+                <p><strong>Photo:</strong> <img id="userPhotos" alt="User Photo" height="100" width="100" /></p>
+                <label for="photo">Photo:</label>
+                <input type="file" id="photo" name="photo" accept="image/png,image/jpeg,image/jpg"><br><br>
+
+                <p><strong>Resume:</strong> <a id="resumeLinks" href="/public/uploads/" target="_blank">Download Resume</a></p>
+                <label for="resume">Resume:</label>
+                <input type="file" id="resume" name="resume" accept=".pdf,.doc,.docx"><br><br>
+
+                <button type="submit">Save Changes</button>
+                <button type="button" onclick="toggleEdit()">Cancel</button><br><br>
+            </form>
+        </div>
+
+        <script>
+            function toggleEdit() {
+                var profileInfo = document.getElementById('profile-info');
+                var editForm = document.getElementById('edit-profile-form');
+
+                if (profileInfo.style.display === 'none') {
+                    profileInfo.style.display = 'block';
+                    editForm.style.display = 'none';
+                } else {
+                    profileInfo.style.display = 'none';
+                    editForm.style.display = 'block';
+                }
+            }
+
+            function handleUnauthorized(response) {
+                if (response.status === 401) {
+                    window.location.href = '/login.html';
+                }
+            }
+
+            fetch('/user', { method: 'GET' })
+                .then(response => response.json())
+                .then(user => {
+                    document.getElementById('usernamePlaceholder').textContent = user.username;
+                    document.getElementById('usernameInput').value = user.username;
+                    document.getElementById('emailInput').value = user.email;
+                    document.getElementById('genderInput').value = user.gender;
+                    document.getElementById('addressInput').value = user.address;
+                    document.getElementById('mobileInput').value = user.mobile;
+                    document.getElementById('dobInput').value = user.dob;
+                    document.getElementById('hobbiesList').innerHTML = user.hobbies;
+
+                    const hobbiesArray = user.hobbies.split(", ");
+                    hobbiesArray.forEach(hobby => {
+                        const checkbox = document.querySelector(`input[value="${hobby}"]`);
+                        if (checkbox) {
+                            checkbox.checked = true;
+                        }
+                    });
+
+                    document.getElementById('educationInput').value = user.education;
+
+                    if (user.photo_path) {
+                        document.getElementById('userPhotos').src = user.photo_path;
+                    }
+
+                    if (user.resumePath) {
+                        document.getElementById('resumeLinks').href = user.resumePath;
+                    }
+                })
+                .catch(error => console.error('Error fetching user data:', error));
+
+            document.getElementById('editForm').addEventListener('submit', function(event) {
+                event.preventDefault();
+
+                const formData = new FormData(this);
+
+                fetch('/edit-profile', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to update profile');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    alert('Profile updated successfully');
+                    location.reload();
+                })
+                .catch(error => {
+                    console.error('Error updating profile:', error);
+                    alert('updated profile');
+                    location.reload();
+                });
+            });
+
+            function cancelEdit() {
+                location.reload();
+            }
+        </script>
+    </div>
+</body>
+</html>
